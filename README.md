@@ -7,7 +7,7 @@ This repository contains compiled and obfuscated output only. It has no source
 code, package manifest, or local build command; the source lives in the private
 `mordredagent/mordred-extension` repository.
 
-Current version: **0.2.0**
+Current version: **0.2.1**
 
 ## What it does
 
@@ -83,7 +83,7 @@ Chrome Web Store accepts a ZIP archive, not an individual JavaScript file. Run:
 The script reads the version from `dist/manifest.json` and creates:
 
 ```text
-release/mordred-extension-0.2.0.zip
+release/mordred-extension-0.2.1.zip
 ```
 
 To choose another output path, pass a `.zip` path relative to the repository or
