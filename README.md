@@ -72,6 +72,33 @@ the extension.
 Reloading the unpacked extension preserves its stored pairing and channel-key
 state. Removing and reinstalling the extension may not.
 
+## Create a Chrome Web Store package
+
+Chrome Web Store accepts a ZIP archive, not an individual JavaScript file. Run:
+
+```sh
+./scripts/package-chrome-web-store.sh
+```
+
+The script reads the version from `dist/manifest.json` and creates:
+
+```text
+release/mordred-extension-0.2.0.zip
+```
+
+To choose another output path, pass a `.zip` path relative to the repository or
+an absolute path:
+
+```sh
+./scripts/package-chrome-web-store.sh release/mordred-upload.zip
+```
+
+Upload the resulting ZIP as a whole. Its `manifest.json` is at the ZIP root, as
+required by the [Chrome Web Store packaging
+guide](https://developer.chrome.com/docs/webstore/prepare#zip). For an update to
+an existing store item, first increase `version` in `dist/manifest.json`; Chrome
+Web Store requires every uploaded update to use a higher version.
+
 ## Browser access
 
 The Manifest V3 bundle requests the following access:
@@ -113,6 +140,9 @@ request is approved.
 - `dist/a0.js` — background service worker
 - `dist/a1.js` through `dist/a5.js` — Slack, Discord, and Web3 integration
 - `dist/icons/` — extension icons
+- `scripts/package-chrome-web-store.sh` — validated Chrome Web Store ZIP
+  packaging
+- `release/` — generated upload packages (ignored by Git)
 
 There are intentionally no `.ts`, `.tsx`, `.map`, dependency directories, or
 build-tool files in this repository.

@@ -28,6 +28,8 @@ The opaque filenames are intentional. Their current roles are:
 | `dist/popup.html`, `dist/a6.js`, `dist/a6.css` | Popup application |
 | `dist/src/sign/index.html`, `dist/a7.js`, `dist/a7.css` | Wallet request approval window |
 | `dist/icons/` | Browser extension icons |
+| `scripts/package-chrome-web-store.sh` | Validates and packages `dist/` for Chrome Web Store upload |
+| `release/*.zip` | Generated Chrome Web Store packages; intentionally ignored by Git |
 
 Keep HTML references and `manifest.json` entry points consistent when replacing
 artifacts. Do not rename opaque files independently.
@@ -40,6 +42,9 @@ artifacts. Do not rename opaque files independently.
   Hashed/opaque entries can depend on one another even when their names remain
   stable.
 - Keep `manifest.json`'s `version` and README's **Current version** in sync.
+- Create Chrome Web Store ZIPs with
+  `./scripts/package-chrome-web-store.sh`; do not zip the `dist/` directory as a
+  top-level folder because `manifest.json` must be at the archive root.
 - Reconcile README features, browser access, gateway requirements, and file
   layout whenever the manifest or UI behavior changes.
 - Review every permission and match-pattern change deliberately. In particular,
@@ -72,6 +77,7 @@ Useful read-only checks:
 node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('dist/manifest.json', 'utf8')); console.log('manifest OK')"
 find dist -type f | sort
 find dist -type f \( -name '*.map' -o -name '*.ts' -o -name '*.tsx' \)
+./scripts/package-chrome-web-store.sh
 git status --short
 ```
 
