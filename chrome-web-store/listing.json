@@ -1,0 +1,65 @@
+{
+  "item": {
+    "name": "Mordred",
+    "extensionId": "hjdjaknfdfcmlndipbcoflplecpofdbl",
+    "publisherDisplayName": "INTMAX",
+    "dashboardStatus": "Draft",
+    "lastPreparedForVersion": "0.2.2"
+  },
+  "listing": {
+    "defaultLanguage": {
+      "code": "en",
+      "label": "English"
+    },
+    "category": "Productivity",
+    "description": "Mordred connects your browser to a local Mordred-Hermes agent for secure chat, encrypted collaboration, and Web3 wallet approvals.\n\nUse Mordred to:\n• Pair one or more local Hermes agents.\n• Encrypt and decrypt registered Slack and Discord channel messages end to end.\n• Share encrypted-channel keys securely with teammates.\n• Review website connection and signing requests before they are sent to Hermes.\n• Keep wallet signing operations and private keys on the Hermes side.\n\nMordred requires a local Mordred-Hermes gateway for pairing, chat, automated channel management, and wallet signing.",
+    "officialUrl": null,
+    "homepageUrl": "https://github.com/mordredagent/mordred-extension-dist",
+    "supportUrl": "https://github.com/mordredagent/mordred-extension-dist/issues",
+    "globalPromoVideoUrl": null,
+    "matureContent": false
+  },
+  "assets": {
+    "storeIcon": "chrome-web-store/assets/brand/store-icon-128.png",
+    "websiteLogo": "chrome-web-store/assets/brand/mordred-logo.png",
+    "screenshots": [
+      "chrome-web-store/assets/screenshots/01-popup-onboarding-1280x800.png"
+    ],
+    "smallPromoTile": "chrome-web-store/assets/promo/small-promo-440x280.png",
+    "marqueePromoTile": "chrome-web-store/assets/promo/marquee-promo-1400x560.png"
+  },
+  "privacy": {
+    "singlePurpose": "Mordred is a secure bridge between the browser and a user-operated local Mordred-Hermes agent. Its single purpose is to let the user communicate with that local agent: chat with the paired agent, send and receive end-to-end encrypted messages in the Slack and Discord channels the user registers, and review and approve Web3 wallet connection and signing requests before they are forwarded to the local agent. Wallet signing keys stay on the Hermes side; the extension only relays user-approved requests. Every feature serves this single goal of connecting the browser to the user's own local agent.",
+    "permissionJustifications": {
+      "activeTab": "activeTab lets the Mordred toolbar popup read the current tab URL after the user opens it. Mordred uses that URL to identify the Slack or Discord channel during guided setup and to show context for the page the user is viewing. It is used only in response to the popup-open user gesture and grants no background browsing access.",
+      "alarms": "The Manifest V3 background service worker uses chrome.alarms to schedule short, periodic housekeeping that keeps the connection to the user's local Mordred-Hermes agent healthy: retrying and re-establishing the local connection after the service worker is suspended, and refreshing pairing/connection state. Because MV3 service workers are frequently terminated, alarms are required to reliably resume this reconnect work without a persistent background page.",
+      "hostPermissions": "Host and content-script access maps directly to the single purpose: http://localhost:7788 and http://127.0.0.1:7788 allow WebSocket data exchange with the user's local Mordred-Hermes gateway; *.slack.com / app.slack.com and *.discord.com / discord.com let content scripts encrypt and decrypt messages in channels the user registers; the permitted Slack and Discord media hosts let background.js fetch encrypted attachment data for decryption; https://*/* and localhost content-script matches make a lightweight Web3 provider available so a page can request a wallet connection. No fetched response is executed as code. No site can access an account or request a signature until the user explicitly approves it in Mordred, and wallet keys never leave the local Hermes agent."
+    },
+    "remoteCode": {
+      "usesRemoteCode": false,
+      "evidence": "All executable JavaScript is packaged in dist/. The package contains no eval, new Function, importScripts, or remotely hosted script reference. WebSocket traffic goes only to the user's local Hermes gateway at localhost:7788 or 127.0.0.1:7788. background.js can also fetch encrypted attachment bytes from the manifest-allowlisted Slack and Discord file hosts; those responses are processed strictly as data and are never executed as code."
+    },
+    "dataUsage": {
+      "collected": [
+        "Financial and payment information",
+        "Authentication information",
+        "Personal communications",
+        "Website content"
+      ],
+      "notCollected": [
+        "Personally identifiable information",
+        "Health information",
+        "Location",
+        "Web history",
+        "User activity"
+      ]
+    },
+    "certifications": {
+      "noSaleOrTransferToThirdParties": true,
+      "noUseForUnrelatedPurposes": true,
+      "noCreditworthinessOrLending": true
+    },
+    "privacyPolicyUrl": "https://github.com/mordredagent/mordred-extension-dist/blob/main/PRIVACY.md",
+    "privacyPolicyUrlNote": "Resolves only after PRIVACY.md is committed and pushed to the public repo."
+  }
+}

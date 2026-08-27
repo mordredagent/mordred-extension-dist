@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560">
+  <rect width="1400" height="560" fill="#0e1120"/>
+  <path d="M0 1 H1400 M0 559 H1400" stroke="#1e2338" stroke-width="2"/>
+  <path d="M56 76 H1344" stroke="#1e2338" stroke-width="2"/>
+  <text
+    x="56"
+    y="52"
+    fill="#a8b0d0"
+    font-family="IBM Plex Mono, Menlo, monospace"
+    font-size="15"
+    letter-spacing="5"
+  >LOCAL AGENT · ENCRYPTED CHANNELS · WEB3 APPROVALS</text>
+  <g transform="translate(106 154) scale(2.35)" fill="none">
+    <path
+      d="M6 6 H82 V58 C82 82 64 96 44 102 C24 96 6 82 6 58 Z"
+      stroke="#5851ff"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M27 70 V40 L44 56 L61 40 V70"
+      stroke="#5851ff"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+  <text
+    x="430"
+    y="300"
+    fill="#ffffff"
+    font-family="DM Sans Variable, DM Sans, Arial, Helvetica, sans-serif"
+    font-size="112"
+    font-weight="700"
+    letter-spacing="14"
+  >MORDRED</text>
+  <text
+    x="437"
+    y="369"
+    fill="#9d99ff"
+    font-family="IBM Plex Mono, Menlo, monospace"
+    font-size="21"
+    letter-spacing="7"
+  >FAIL-CLOSED BY DEFAULT</text>
+  <path d="M437 404 H1232" stroke="#2a3050" stroke-width="2"/>
+  <text
+    x="437"
+    y="447"
+    fill="#d7dcf0"
+    font-family="DM Sans Variable, DM Sans, Arial, Helvetica, sans-serif"
+    font-size="22"
+    letter-spacing="1"
+  >Secure browser bridge to your local Mordred-Hermes agent.</text>
+  <rect x="1264" y="416" width="80" height="80" rx="8" fill="#5851ff" stroke="#7771ff" stroke-width="3"/>
+  <path d="M1285 450 H1323 M1304 431 V469" stroke="#ffffff" stroke-width="3"/>
+</svg>

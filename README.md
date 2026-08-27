@@ -3,11 +3,11 @@
 Prebuilt, ready-to-load distribution repository for the **Mordred** browser
 extension on Chromium-based browsers (Chrome, Brave, Arc, and Edge).
 
-This repository contains compiled and obfuscated output only. It has no source
-code, package manifest, or local build command; the source lives in the private
-`mordredagent/mordred-extension` repository.
+This repository contains compiled, minified, non-obfuscated output only. It has
+no source code, package manifest, or local build command; the source lives in
+the private `mordredagent/mordred-extension` repository.
 
-Current version: **0.2.1**
+Current version: **0.2.2**
 
 ## What it does
 
@@ -83,7 +83,7 @@ Chrome Web Store accepts a ZIP archive, not an individual JavaScript file. Run:
 The script reads the version from `dist/manifest.json` and creates:
 
 ```text
-release/mordred-extension-0.2.1.zip
+release/mordred-extension-0.2.2.zip
 ```
 
 To choose another output path, pass a `.zip` path relative to the repository or
@@ -99,18 +99,26 @@ guide](https://developer.chrome.com/docs/webstore/prepare#zip). For an update to
 an existing store item, first increase `version` in `dist/manifest.json`; Chrome
 Web Store requires every uploaded update to use a higher version.
 
+Chrome Web Store listing values, review notes, and asset requirements are kept
+under [`chrome-web-store/`](chrome-web-store/README.md). Treat those files as
+the reviewable repository record; the Developer Dashboard must still be updated
+manually.
+
 ## Browser access
 
 The Manifest V3 bundle requests the following access:
 
 | Access | Purpose |
 | --- | --- |
-| `storage` | Persist pairing, settings, wallet connection state, and encrypted-channel keys. |
 | `activeTab` | Work with the active Slack or Discord tab during setup and channel management. |
 | `alarms` | Maintain background reconnect and housekeeping work. |
 | `localhost:7788`, `127.0.0.1:7788` | Communicate with the local Hermes gateway. |
 | Slack and Discord domains | Detect registered channels and encrypt/decrypt their messages and supported attachments. |
 | All HTTPS pages plus localhost development pages | Inject the Web3 provider and relay site requests to the extension. |
+
+Pairing, settings, wallet connection state, and encrypted-channel keys are
+persisted locally in extension-scoped IndexedDB, which requires no additional
+manifest permission.
 
 Review site connection and wallet approval prompts carefully. The extension's
 ability to run on HTTPS pages is broad because the wallet provider must be
@@ -126,22 +134,24 @@ request is approved.
   extension for display.
 - Wallet signing remains on the Hermes side. Treat the endpoint identity and
   every connection or signature approval as security-sensitive.
-- The bundle uses opaque filenames, identifier mangling, encoded string
-  literals, and no source maps or comments. This reduces distribution noise;
-  it is **not** a security boundary. Browser extensions run on the user's
-  machine and can always be inspected.
+- The bundle uses Chrome Web Store-permitted minification and descriptive
+  filenames. It does not encode string literals or apply other obfuscation and
+  contains no source maps. Browser extensions run on the user's machine and
+  can always be inspected.
 
 ## Distribution contents
 
 - `dist/manifest.json` — Manifest V3 metadata, permissions, and entry points
-- `dist/popup.html`, `dist/a6.js`, `dist/a6.css` — extension popup
-- `dist/src/sign/index.html`, `dist/a7.js`, `dist/a7.css` — wallet approval
+- `dist/popup.html`, `dist/popup.js`, `dist/popup.css` — extension popup
+- `dist/src/sign/index.html`, `dist/sign.js`, `dist/sign.css` — wallet approval
   window
-- `dist/a0.js` — background service worker
-- `dist/a1.js` through `dist/a5.js` — Slack, Discord, and Web3 integration
+- `dist/background.js` — background service worker
+- `dist/content-*.js`, `dist/injected-*.js` — Slack, Discord, and Web3 integration
 - `dist/icons/` — extension icons
 - `scripts/package-chrome-web-store.sh` — validated Chrome Web Store ZIP
   packaging
+- `chrome-web-store/` — Store listing metadata, privacy/reviewer notes, and
+  approved asset guidance
 - `release/` — generated upload packages (ignored by Git)
 
 There are intentionally no `.ts`, `.tsx`, `.map`, dependency directories, or

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="280" viewBox="0 0 440 280">
+  <rect width="440" height="280" fill="#0e1120"/>
+  <path d="M0 1 H440 M0 279 H440" stroke="#1e2338" stroke-width="2"/>
+  <path d="M32 40 H128" stroke="#5851ff" stroke-width="3"/>
+  <text
+    x="32"
+    y="27"
+    fill="#a8b0d0"
+    font-family="IBM Plex Mono, Menlo, monospace"
+    font-size="10"
+    letter-spacing="3"
+  >BROWSER EXTENSION</text>
+  <g transform="translate(176 53)" fill="none">
+    <path
+      d="M6 6 H82 V58 C82 82 64 96 44 102 C24 96 6 82 6 58 Z"
+      stroke="#5851ff"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M27 70 V40 L44 56 L61 40 V70"
+      stroke="#5851ff"
+      stroke-width="8.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+  <text
+    x="220"
+    y="210"
+    fill="#ffffff"
+    font-family="DM Sans Variable, DM Sans, Arial, Helvetica, sans-serif"
+    font-size="38"
+    font-weight="700"
+    letter-spacing="6"
+    text-anchor="middle"
+  >MORDRED</text>
+  <text
+    x="220"
+    y="241"
+    fill="#9d99ff"
+    font-family="IBM Plex Mono, Menlo, monospace"
+    font-size="10"
+    letter-spacing="3"
+    text-anchor="middle"
+  >FAIL-CLOSED BY DEFAULT</text>
+</svg>

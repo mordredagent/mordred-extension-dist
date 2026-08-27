@@ -4,44 +4,47 @@
 
 This repository, `mordredagent/mordred-extension-dist`, is the load-unpacked
 distribution of the private `mordredagent/mordred-extension` project. It
-contains generated, obfuscated Manifest V3 artifacts only. There is no source
-tree, package manager configuration, or supported build command here.
+contains generated, Chrome Web Store-ready Manifest V3 artifacts only. There is
+no source tree, package manager configuration, or supported build command here.
 
-Do not treat this as the source repository and do not hand-edit obfuscated
+Do not treat this as the source repository and do not hand-edit generated
 JavaScript or CSS unless the user explicitly requests an emergency patch. A
 normal release update replaces the complete generated `dist/` output from the
 private source repository.
 
 ## Distribution layout
 
-The opaque filenames are intentional. Their current roles are:
+The descriptive filenames are intentional. Their current roles are:
 
 | Path | Role |
 | --- | --- |
 | `dist/manifest.json` | Extension metadata, permissions, and entry-point wiring |
-| `dist/a0.js` | Background service worker; Hermes transport, pairing, channel-key state, and wallet request routing |
-| `dist/a1.js` | Slack content script (isolated world) |
-| `dist/a2.js` | Discord content script (isolated world) |
-| `dist/a3.js` | Isolated-world Web3 bridge |
-| `dist/a4.js` | Main-world Web3 provider |
-| `dist/a5.js` | Main-world Slack editor integration |
-| `dist/popup.html`, `dist/a6.js`, `dist/a6.css` | Popup application |
-| `dist/src/sign/index.html`, `dist/a7.js`, `dist/a7.css` | Wallet request approval window |
+| `dist/background.js` | Background service worker; Hermes transport, pairing, channel-key state, and wallet request routing |
+| `dist/content-slack.js` | Slack content script (isolated world) |
+| `dist/content-discord.js` | Discord content script (isolated world) |
+| `dist/content-web3.js` | Isolated-world Web3 bridge |
+| `dist/injected-provider.js` | Main-world Web3 provider |
+| `dist/injected-slack-quill.js` | Main-world Slack editor integration |
+| `dist/popup.html`, `dist/popup.js`, `dist/popup.css` | Popup application |
+| `dist/src/sign/index.html`, `dist/sign.js`, `dist/sign.css` | Wallet request approval window |
 | `dist/icons/` | Browser extension icons |
 | `scripts/package-chrome-web-store.sh` | Validates and packages `dist/` for Chrome Web Store upload |
+| `chrome-web-store/` | Versioned Store listing values, review notes, and approved asset guidance |
 | `release/*.zip` | Generated Chrome Web Store packages; intentionally ignored by Git |
 
 Keep HTML references and `manifest.json` entry points consistent when replacing
-artifacts. Do not rename opaque files independently.
+artifacts. Do not rename generated files independently.
 
 ## Release-update rules
 
 - Preserve the compiled-output-only shape: do not add source files, source
   maps, dependency directories, build caches, or private-repository material.
 - Replace the whole generated bundle, not only the files that appear changed.
-  Hashed/opaque entries can depend on one another even when their names remain
-  stable.
+  Generated entries can depend on one another even when their names remain stable.
 - Keep `manifest.json`'s `version` and README's **Current version** in sync.
+- Keep `chrome-web-store/listing.json`'s `item.lastPreparedForVersion` in sync
+  with the submitted manifest. Update Dashboard status only from confirmed
+  Dashboard state.
 - Create Chrome Web Store ZIPs with
   `./scripts/package-chrome-web-store.sh`; do not zip the `dist/` directory as a
   top-level folder because `manifest.json` must be at the archive root.
@@ -52,8 +55,11 @@ artifacts. Do not rename opaque files independently.
   pages, while Slack and Discord have platform-specific scripts and host access.
 - Never add credentials, Slack/Discord tokens, pairing codes, channel keys,
   wallet material, `.env` files, or source maps.
-- Obfuscation is distribution hygiene, not a security boundary. Do not describe
-  it as protecting secrets.
+- Never commit reviewer-only access data or screenshots containing workspace,
+  wallet, account, or browser-profile secrets. Store reviewer credentials only
+  in the Chrome Web Store Dashboard.
+- Do not obfuscate the distribution. Chrome Web Store permits minification but
+  prohibits encoded strings and other transforms that conceal functionality.
 
 ## Validation
 
@@ -75,6 +81,7 @@ Useful read-only checks:
 
 ```sh
 node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('dist/manifest.json', 'utf8')); console.log('manifest OK')"
+node -e "const fs=require('fs'); const m=JSON.parse(fs.readFileSync('dist/manifest.json')); const l=JSON.parse(fs.readFileSync('chrome-web-store/listing.json')); if (m.version !== l.item.lastPreparedForVersion) throw new Error('Store listing version mismatch'); console.log('store listing OK')"
 find dist -type f | sort
 find dist -type f \( -name '*.map' -o -name '*.ts' -o -name '*.tsx' \)
 ./scripts/package-chrome-web-store.sh

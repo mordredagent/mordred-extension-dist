@@ -6,6 +6,7 @@ SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)
 DIST_DIR="$REPO_ROOT/dist"
 MANIFEST_PATH="$DIST_DIR/manifest.json"
+STORE_LISTING_PATH="$REPO_ROOT/chrome-web-store/listing.json"
 
 fail() {
   printf 'error: %s\n' "$*" >&2
@@ -31,6 +32,21 @@ VERSION=$(node -e '
   }
   process.stdout.write(manifest.version);
 ' "$MANIFEST_PATH")
+
+if [ -f "$STORE_LISTING_PATH" ]; then
+  # JavaScript template literals below are intentionally protected from the shell.
+  # shellcheck disable=SC2016
+  node -e '
+    const fs = require("fs");
+    const listing = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+    if (listing.item?.lastPreparedForVersion !== process.argv[2]) {
+      throw new Error(
+        `Chrome Web Store listing version ${listing.item?.lastPreparedForVersion} ` +
+        `does not match manifest version ${process.argv[2]}`
+      );
+    }
+  ' "$STORE_LISTING_PATH" "$VERSION"
+fi
 
 case "$VERSION" in
   *[!0-9A-Za-z._-]*|'') fail "manifest version is unsafe for a filename: $VERSION" ;;
