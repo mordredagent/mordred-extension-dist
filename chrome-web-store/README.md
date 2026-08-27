@@ -12,7 +12,7 @@ Dashboard and keep both sides aligned.
 | Publisher | `INTMAX` |
 | Extension ID | `hjdjaknfdfcmlndipbcoflplecpofdbl` |
 | Dashboard status | Draft |
-| Prepared package version | `0.2.2` |
+| Prepared package version | `0.2.3` |
 | Default listing language | English (`en`) |
 | Category | Productivity |
 

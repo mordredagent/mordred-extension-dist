@@ -52,7 +52,7 @@ submission time:
 - The package is minified but not obfuscated. Minification is not a privacy or
   security control.
 
-## Finalized Dashboard answers — Privacy page (v0.2.2, 2026-08-27)
+## Finalized Dashboard answers — Privacy page (v0.2.3, 2026-08-27)
 
 Paste-ready values for the Chrome Web Store **Privacy** page.
 

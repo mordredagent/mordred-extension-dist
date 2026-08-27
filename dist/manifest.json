@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "minimum_chrome_version": "111",
   "name": "Mordred",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Mordred Browser Extension — chat, E2E-encrypted Slack, and Web3 wallet bridge to a local Mordred-Hermes agent.",
   "action": {
     "default_popup": "popup.html",
