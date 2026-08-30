@@ -54,6 +54,10 @@ submission time:
 
 ## Finalized Dashboard answers — Privacy page (v0.2.3, 2026-08-27)
 
+Re-validated unchanged for v0.2.7 (2026-08-31): the manifest gained only the
+`key` field (pins the published extension ID); permissions, host access, and
+content-script matches are identical to v0.2.3.
+
 Paste-ready values for the Chrome Web Store **Privacy** page.
 
 ### Remote code
