@@ -14,7 +14,7 @@ Dashboard and keep both sides aligned.
 | Dashboard status | Published - public; 0.2.7 pending review (submitted 2026-08-31, auto-publish on approval) |
 | Prepared package version | `0.2.7` |
 | Default listing language | English (`en`) |
-| Category | Productivity |
+| Category | Tools |
 
 Exact Dashboard field values and asset paths are in
 [`listing.json`](./listing.json). Review-related working notes are split into

@@ -11,7 +11,7 @@
       "code": "en",
       "label": "English"
     },
-    "category": "Productivity",
+    "category": "Tools",
     "description": "Mordred connects your browser to a local Mordred-Hermes agent for secure chat, encrypted collaboration, and Web3 wallet approvals.\n\nUse Mordred to:\n• Pair one or more local Hermes agents.\n• Encrypt and decrypt registered Slack and Discord channel messages end to end.\n• Share encrypted-channel keys securely with teammates.\n• Review website connection and signing requests before they are sent to Hermes.\n• Keep wallet signing operations and private keys on the Hermes side.\n\nMordred requires a local Mordred-Hermes gateway for pairing, chat, automated channel management, and wallet signing.",
     "officialUrl": null,
     "homepageUrl": "https://github.com/mordredagent/mordred-extension-dist",
