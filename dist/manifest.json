@@ -3,8 +3,8 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvte/J6wpLenDG9ahN1rOm2c0vbeLbt1z0qU2kXUuiKU9zzzPqDKwGRl2hTjl8Vtywlw540rBDYaknJXVugjfVXZ/164DkKKnXgxa5zZuEJZddy9a9XNEMewnK1ZE9Il/B1Kti54TRYdofckcKVRfdLjfCjEcU6HBgVAndCeXnPmf0keIADTrMO1fNAydkl97FBlD4KOAV9ZpMDLu5oj1l0namywdF4KKexv1Ky0w/iyJ61isItRDxGRnBV5DdCdqMCzjRX5uaqW/wYXhSNDj0s2BtTElvVkc+Yybe/CypARkPe9w4nb+mMZ9oFOq5AIZ+gPHYhyCz5d8iOKSZj4pwQIDAQAB",
   "minimum_chrome_version": "111",
   "name": "Mordred",
-  "version": "0.2.7",
-  "description": "Mordred Browser Extension — chat, E2E-encrypted Slack, and Web3 wallet bridge to a local Mordred-Hermes agent.",
+  "version": "0.2.8",
+  "description": "Mordred Browser Extension — chat, E2E-encrypted Slack, and wallet bridge to a local Mordred-Hermes agent.",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Mordred",
