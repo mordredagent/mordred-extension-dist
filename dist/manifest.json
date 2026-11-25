@@ -3,8 +3,8 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvte/J6wpLenDG9ahN1rOm2c0vbeLbt1z0qU2kXUuiKU9zzzPqDKwGRl2hTjl8Vtywlw540rBDYaknJXVugjfVXZ/164DkKKnXgxa5zZuEJZddy9a9XNEMewnK1ZE9Il/B1Kti54TRYdofckcKVRfdLjfCjEcU6HBgVAndCeXnPmf0keIADTrMO1fNAydkl97FBlD4KOAV9ZpMDLu5oj1l0namywdF4KKexv1Ky0w/iyJ61isItRDxGRnBV5DdCdqMCzjRX5uaqW/wYXhSNDj0s2BtTElvVkc+Yybe/CypARkPe9w4nb+mMZ9oFOq5AIZ+gPHYhyCz5d8iOKSZj4pwQIDAQAB",
   "minimum_chrome_version": "111",
   "name": "Mordred",
-  "version": "0.2.8",
-  "description": "Mordred Browser Extension — chat, E2E-encrypted Slack, and wallet bridge to a local Mordred-Hermes agent.",
+  "version": "0.3.0",
+  "description": "Mordred Browser Extension — chat, recall, and wallet bridge to a local Mordred-Hermes agent.",
   "action": {
     "default_popup": "popup.html",
     "default_title": "Mordred",
@@ -26,51 +26,17 @@
   },
   "permissions": [
     "activeTab",
-    "alarms"
+    "alarms",
+    "nativeMessaging",
+    "scripting"
   ],
   "host_permissions": [
-    "http://localhost:7788/*",
-    "http://127.0.0.1:7788/*",
-    "https://app.slack.com/*",
-    "https://*.slack.com/*",
-    "https://discord.com/*",
-    "https://*.discord.com/*",
-    "https://cdn.discordapp.com/*",
-    "https://media.discordapp.net/*"
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "http://*/*",
+    "https://*/*"
   ],
   "content_scripts": [
-    {
-      "matches": [
-        "https://app.slack.com/*",
-        "https://*.slack.com/*"
-      ],
-      "js": [
-        "content-slack.js"
-      ],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": [
-        "https://discord.com/*",
-        "https://*.discord.com/*"
-      ],
-      "js": [
-        "content-discord.js"
-      ],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": [
-        "https://app.slack.com/*",
-        "https://*.slack.com/*"
-      ],
-      "js": [
-        "injected-slack-quill.js"
-      ],
-      "run_at": "document_idle",
-      "world": "MAIN",
-      "all_frames": false
-    },
     {
       "matches": [
         "https://*/*",
@@ -94,6 +60,17 @@
       ],
       "run_at": "document_start",
       "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content-recall.js"
+      ],
+      "run_at": "document_idle",
       "all_frames": false
     }
   ]

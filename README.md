@@ -7,28 +7,42 @@ This repository contains compiled, minified, non-obfuscated output only. It has
 no source code, package manifest, or local build command; the source lives in
 the private `mordredagent/mordred-extension` repository.
 
-Current version: **0.2.8**
+Current version: **0.3.0**
 
 ## What it does
 
-- Pairs with one or more local **Mordred-Hermes** agents for chat, key
-  management, and wallet approvals.
-- Adds end-to-end encryption to registered Slack and Discord channels,
-  including teammate-to-teammate channel-key sharing. Once a shared channel
-  key is installed, channel encryption can continue without a connected Hermes
-  agent.
+- Connects by itself to the **Mordred-Hermes** agent on this Mac: opening the
+  popup is enough. The Mac installer (`Mordred.pkg`) registers a native
+  messaging host (`com.mordred.hermes`) that tells the extension where Hermes
+  listens. A new browser is admitted once, with Touch ID on the Mac, after
+  checking that the Mac and the popup show the same code.
+- Chat with Hermes, and search what you did before: conversations and mail
+  that Hermes has imported, grouped by topic and event.
+- Select text on any page to see related topics, events and conversations from
+  Hermes, its recommendations, and a translation by Hermes's local model when
+  the selection is in another language.
+- Start and follow Hermes's imports (for example Gmail with an app password, or
+  Claude Code and Antigravity sessions). The import itself runs in Hermes.
 - Exposes a Mordred Web3 wallet provider to HTTPS sites and local development
   pages. Sites must request access, and sensitive wallet actions are shown in a
-  separate approval window before Hermes signs them.
-- Keeps wallet signing keys on the Hermes side rather than in the extension.
+  separate approval window before Hermes signs them. Wallet signing keys stay
+  on the Hermes side.
+- The interface is available in 25 languages and follows the browser's
+  language.
+
+Slack and Discord channel encryption is no longer part of this extension
+(removed in 0.3.0).
 
 ## Requirements
 
-- A Chromium-based browser with extension developer mode enabled.
-- A local Mordred-Hermes installation for pairing, chat, automated channel
-  management, or wallet signing.
-- The packaged extension connects to the Hermes browser-extension gateway on
-  `localhost:7788` (or `127.0.0.1:7788`).
+- A Chromium-based browser (Chrome, Brave, Arc, Edge).
+- Mordred-Hermes on a Mac with Apple silicon, installed with `Mordred.pkg`.
+  The installer registers the native messaging host for Brave and Chrome, so
+  the extension finds Hermes on its own (by default
+  `ws://127.0.0.1:47711/ext`; the installer moves to a free port in
+  47714–47799 if that one is taken).
+- A Hermes on another computer can still be added by typing its address in the
+  popup.
 
 ## Install
 
@@ -39,26 +53,23 @@ Current version: **0.2.8**
    - Edge: `edge://extensions`
 3. Enable **Developer mode**.
 4. Select **Load unpacked** and choose this repository's `dist/` directory.
-5. Pin Mordred to the toolbar so pairing and approval state are easy to reach.
+5. Pin Mordred to the toolbar so its connection state is easy to reach.
 
 Do not select the repository root: `dist/manifest.json` must be the manifest
 loaded by the browser.
 
-## Pair with Hermes
+## Connect to Hermes
 
-Start the browser-extension gateway from the Hermes environment:
+Open the Mordred popup. On a Mac where `Mordred.pkg` is installed, the
+extension finds Hermes and asks it to admit this browser. The Mac shows a
+Touch ID sheet with a short code; check that the popup shows the same code,
+then approve with Touch ID. After that, opening the popup connects with no
+further step.
 
-```sh
-hermes-mordred extension serve
-```
-
-Open the Mordred popup, choose **Connect a Hermes agent**, and enter the pairing
-code printed by the command. The popup also contains guided setup for Slack and
-Discord after pairing.
-
-Re-pair the same endpoint when its agent details need refreshing. Do not unpair
-or reinstall merely to reconnect: unpairing removes shared channel keys from
-the extension.
+The approval is only raised for this extension: the native host gives the
+extension a ticket for that code, and Hermes refuses an approval request
+without it. Unpacked development builds have another extension ID, which has
+to be added on the Mac (see the Mordred-Hermes installer documentation).
 
 ## Update an existing installation
 
@@ -66,11 +77,11 @@ the extension.
    file below `dist/`.
 2. Return to the browser's extensions page.
 3. Click **Reload** on Mordred.
-4. Open the popup and confirm the Hermes connection and registered encrypted
-   channels.
+4. Open the popup and confirm that it connects to Hermes.
 
-Reloading the unpacked extension preserves its stored pairing and channel-key
-state. Removing and reinstalling the extension may not.
+Reloading the unpacked extension keeps its stored connection state. Removing
+and reinstalling the extension clears it, so Hermes asks to admit the browser
+again with Touch ID.
 
 ## Create a Chrome Web Store package
 
@@ -83,7 +94,7 @@ Chrome Web Store accepts a ZIP archive, not an individual JavaScript file. Run:
 The script reads the version from `dist/manifest.json` and creates:
 
 ```text
-release/mordred-extension-0.2.8.zip
+release/mordred-extension-0.3.0.zip
 ```
 
 To choose another output path, pass a `.zip` path relative to the repository or
@@ -110,15 +121,15 @@ The Manifest V3 bundle requests the following access:
 
 | Access | Purpose |
 | --- | --- |
-| `activeTab` | Work with the active Slack or Discord tab during setup and channel management. |
+| `nativeMessaging` | Ask the Mordred native host on this Mac where Hermes listens, and for the ticket that lets Hermes raise the approval for this browser. |
+| `activeTab` | Attach the current tab's address to a chat message when that setting is on (off by default). |
+| `scripting` | After an install or update, add the selection panel to tabs that were already open. |
 | `alarms` | Maintain background reconnect and housekeeping work. |
-| `localhost:7788`, `127.0.0.1:7788` | Communicate with the local Hermes gateway. |
-| Slack and Discord domains | Detect registered channels and encrypt/decrypt their messages and supported attachments. |
-| All HTTPS pages plus localhost development pages | Inject the Web3 provider and relay site requests to the extension. |
+| `http://localhost/*`, `http://127.0.0.1/*` | Communicate with the local Hermes gateway on the port the installer chose. |
+| All HTTP and HTTPS pages | The selection panel (it reacts only to a text selection the user makes) and the Web3 provider (HTTPS and localhost pages). |
 
-Pairing, settings, wallet connection state, and encrypted-channel keys are
-persisted locally in extension-scoped IndexedDB, which requires no additional
-manifest permission.
+Connection state, settings and wallet connection state are stored locally in
+extension-scoped IndexedDB, which requires no additional manifest permission.
 
 Review site connection and wallet approval prompts carefully. The extension's
 ability to run on HTTPS pages is broad because the wallet provider must be
@@ -127,13 +138,13 @@ request is approved.
 
 ## Security notes
 
-- Slack and Discord channel keys are held by the extension so encryption can
-  keep working when Hermes is temporarily offline. Unpairing deletes the shared
-  keys; export or re-share anything needed before doing so.
-- Chat history is stored encrypted on Hermes and is shared with the paired
-  extension for display.
-- Wallet signing remains on the Hermes side. Treat the endpoint identity and
-  every connection or signature approval as security-sensitive.
+- The extension talks only to the user's own Hermes. Selected text and chat
+  messages are sent to that Hermes; the extension itself sends nothing to
+  INTMAX or any third party.
+- A new browser is admitted only after the user approves it on the Mac with
+  Touch ID, and only for this extension's ID.
+- Wallet signing remains on the Hermes side. Treat every connection or
+  signature approval as security-sensitive.
 - The bundle uses Chrome Web Store-permitted minification and descriptive
   filenames. It does not encode string literals or apply other obfuscation and
   contains no source maps. Browser extensions run on the user's machine and
@@ -146,7 +157,8 @@ request is approved.
 - `dist/src/sign/index.html`, `dist/sign.js`, `dist/sign.css` — wallet approval
   window
 - `dist/background.js` — background service worker
-- `dist/content-*.js`, `dist/injected-*.js` — Slack, Discord, and Web3 integration
+- `dist/content-recall.js` — the selection panel
+- `dist/content-web3.js`, `dist/injected-provider.js` — Web3 bridge and provider
 - `dist/icons/` — extension icons
 - `scripts/package-chrome-web-store.sh` — validated Chrome Web Store ZIP
   packaging
@@ -156,3 +168,4 @@ request is approved.
 
 There are intentionally no `.ts`, `.tsx`, `.map`, dependency directories, or
 build-tool files in this repository.
+

@@ -19,12 +19,10 @@ The descriptive filenames are intentional. Their current roles are:
 | Path | Role |
 | --- | --- |
 | `dist/manifest.json` | Extension metadata, permissions, and entry-point wiring |
-| `dist/background.js` | Background service worker; Hermes transport, pairing, channel-key state, and wallet request routing |
-| `dist/content-slack.js` | Slack content script (isolated world) |
-| `dist/content-discord.js` | Discord content script (isolated world) |
+| `dist/background.js` | Background service worker; Hermes transport, connection and approval state, native host calls, and wallet request routing |
+| `dist/content-recall.js` | Selection panel content script (isolated world) |
 | `dist/content-web3.js` | Isolated-world Web3 bridge |
 | `dist/injected-provider.js` | Main-world Web3 provider |
-| `dist/injected-slack-quill.js` | Main-world Slack editor integration |
 | `dist/popup.html`, `dist/popup.js`, `dist/popup.css` | Popup application |
 | `dist/src/sign/index.html`, `dist/sign.js`, `dist/sign.css` | Wallet request approval window |
 | `dist/icons/` | Browser extension icons |
@@ -51,9 +49,9 @@ artifacts. Do not rename generated files independently.
 - Reconcile README features, browser access, gateway requirements, and file
   layout whenever the manifest or UI behavior changes.
 - Review every permission and match-pattern change deliberately. In particular,
-  the Web3 bridge currently runs on all HTTPS pages plus localhost development
-  pages, while Slack and Discord have platform-specific scripts and host access.
-- Never add credentials, Slack/Discord tokens, pairing codes, channel keys,
+  the Web3 bridge runs on all HTTPS pages plus localhost development pages,
+  and the selection panel runs on all HTTP and HTTPS pages.
+- Never add credentials, tokens, approval codes, device keys,
   wallet material, `.env` files, or source maps.
 - Never commit reviewer-only access data or screenshots containing workspace,
   wallet, account, or browser-profile secrets. Store reviewer credentials only
@@ -73,8 +71,8 @@ path and command against the current bundle. For a distribution update, also:
    unexpected untracked artifacts.
 4. Load `dist/` through the browser's **Load unpacked** flow and check for
    manifest or service-worker errors.
-5. Smoke-test the popup, Hermes pairing/reconnect, the relevant Slack/Discord
-   channel flow, and Web3 connection/signing when those areas changed.
+5. Smoke-test the popup, the Hermes connection and approval, the selection
+   panel, and Web3 connection/signing when those areas changed.
 6. Review `git diff --stat`, `git diff`, and `git status --short` before commit.
 
 Useful read-only checks:

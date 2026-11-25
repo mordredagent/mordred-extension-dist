@@ -6,18 +6,21 @@ and the Dashboard's current definitions before saving or certifying anything.
 
 ## Single purpose draft
 
-Mordred connects the browser to a user-controlled local Mordred-Hermes agent to
-provide secure agent chat, end-to-end encrypted Slack and Discord channels, and
-user-approved Web3 wallet connections and signing requests.
+Mordred connects the browser to the user's own Mordred-Hermes agent on their
+Mac: chat with it, look up related past conversations and mail it holds
+(including for text the user selects on a page), and review and approve Web3
+wallet connection and signing requests.
 
 ## Permission justification drafts
 
 | Permission or host access | Current purpose |
 | --- | --- |
-| `activeTab` | Work with the active Slack or Discord page during guided setup and channel management. |
+| `nativeMessaging` | Ask the native host `com.mordred.hermes` (registered by the Mordred-Hermes installer) for the local Hermes address and for the ticket that lets Hermes raise its Touch ID approval for this extension only. |
+| `activeTab` | Attach the current tab's address to a chat message when that setting is on (off by default). |
+| `scripting` | After install or update, add the packaged selection-panel script to tabs that were already open. |
 | `alarms` | Schedule background reconnect and housekeeping work for the Hermes connection. |
-| `localhost:7788`, `127.0.0.1:7788` | Communicate with the user-operated local Mordred-Hermes browser-extension gateway. |
-| Slack and Discord hosts | Identify registered channels and encrypt or decrypt supported messages and attachments. |
+| `http://localhost/*`, `http://127.0.0.1/*` | Communicate with the user's local Mordred-Hermes gateway on the port its installer chose (47711 by default). |
+| All HTTP and HTTPS pages (content script) | The selection panel: after the user selects text, send it to the local Hermes and show related results. |
 | All HTTPS pages and localhost development pages | Make the Mordred Web3 provider available to dapps and relay user-approved wallet requests. A site is not wallet-connected until the user approves it. |
 
 Persistent local state is stored in extension-scoped IndexedDB. IndexedDB does
@@ -29,28 +32,46 @@ The current features can handle data that may fall under these Dashboard
 categories. Confirm the exact definitions shown by Chrome Web Store at
 submission time:
 
-- Personal communications: Hermes chat plus registered Slack/Discord message
-  and supported attachment content.
-- Authentication information: short-lived pairing and WebAuthn/passkey
-  authentication material.
+- Personal communications: Hermes chat, plus the imported conversations and
+  mail that Hermes returns for a search or a selection.
+- Authentication information: the browser's device key for Hermes, and the
+  sign-in details typed in the popup for an import (Gmail app password, Telegram
+  phone number, login code and password). These are sealed and passed to
+  Hermes, not stored by the extension.
 - Financial and payment information: wallet addresses, networks, transaction
   requests, and signature requests handled for Web3 functionality.
-- Website content: supported Slack/Discord content and dapp request data needed
-  to provide the requested feature.
+- Website content: text the user selects on a page (sent to the local Hermes),
+  the current tab's address when the user enabled it, and dapp request data.
 - User activity: connected-site origins and user-initiated wallet RPC actions,
   if the Dashboard definition includes them.
 
 ## Architecture notes
 
-- The packaged host allowlist connects directly to the local Hermes gateway,
-  Slack, Discord, their supported media hosts, and pages receiving the Web3
-  provider.
+- The packaged host allowlist connects to the local Hermes gateway and to pages
+  that receive the selection panel and the Web3 provider. Slack and Discord
+  access was removed in 0.3.0.
 - Wallet signing stays on the Hermes side; private wallet signing keys are not
   packaged in the extension.
-- Shared Slack/Discord channel keys are stored by the extension so encryption
-  can continue while Hermes is temporarily offline.
+- The native host answers only the extension IDs that the Mac installer
+  allowed, and only when the calling process is a signed Brave or Chrome.
 - The package is minified but not obfuscated. Minification is not a privacy or
   security control.
+
+## 0.3.0 changes to revalidate (2026-11-25)
+
+The answers below were finalized for 0.2.3–0.2.7. 0.3.0 changes the inputs:
+
+- Added the `nativeMessaging` and `scripting` permissions.
+- Host access is now `http://localhost/*` and `http://127.0.0.1/*` (any port)
+  plus all HTTP/HTTPS pages for the selection panel. Slack, Discord and
+  their media hosts were removed.
+- New data flows: selected page text goes to the local Hermes; import sign-in
+  details are passed to the local Hermes.
+- Removed: Slack/Discord message encryption and channel keys.
+
+Before submitting 0.3.0, the product owner must confirm the data categories and
+certifications again and update the Dashboard's permission justifications from
+`listing.json`.
 
 ## Finalized Dashboard answers — Privacy page (v0.2.3, 2026-08-27)
 
